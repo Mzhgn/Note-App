@@ -10,7 +10,25 @@ const inputEl = $.querySelector("input");
 const descriptionEl = $.querySelector("textarea");
 const btnElm = $.querySelector("button");
 
+let isUpdate = false;
 let notes = [];
+
+addBox.addEventListener("click", () => {
+  if (isUpdate) {
+    titleEl.innerHTML = "Update your note";
+    btnElm.innerHTML = "Update the Note";
+  } else {
+    titleEl.innerHTML = "Add a note";
+    btnElm.innerHTML = "Add the Note";
+  }
+  inputEl.focus();
+  popUpEl.classList.add("show");
+});
+
+btnElm.addEventListener("click", () => {
+  console.log("add note");
+});
+
 function generateNotes(notes) {}
 function getLocalStorageData() {
   let LocalStorageData = localStorage.getItem("notes");
