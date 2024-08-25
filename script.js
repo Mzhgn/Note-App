@@ -9,33 +9,41 @@ const descriptionEl = $.querySelector("textarea");
 const btnElm = $.querySelector("button");
 
 let isUpdate = false;
+let updateId = null;
 let notes = [];
 
-addBox.addEventListener("click", () => {
-  if (isUpdate) {
-    titleEl.innerHTML = "Update your note";
-    btnElm.innerHTML = "Update the Note";
-  } else {
-    titleEl.innerHTML = "Add a note";
-    btnElm.innerHTML = "Add the Note";
-  }
-  inputEl.focus();
-  popUpEl.classList.add("show");
-});
+addBox.addEventListener("click", showModal);
 
 btnElm.addEventListener("click", () => {
-  let newNote = {
-    tite: inputEl.value,
-    description: descriptionEl.value,
-    date: showDate(),
-  };
-  notes.push(newNote);
+  if (isUpdate) {
+    let allNotes = getLocalStorageData();
 
-  setDataInLocalStorage(notes);
-  generateNotes(notes);
-  closeModal();
+    allNotes.some((note, index) => {
+      if (index === updateId) {
+        note.tite = inputEl.value;
+        note.description = descriptionEl.value;
+      }
+    });
+    setDataInLocalStorage(allNotes);
+    generateNotes(allNotes);
+    closeModal();
+    clearInputs();
 
-  clearInputs();
+    isUpdate = false;
+  } else {
+    let newNote = {
+      tite: inputEl.value,
+      description: descriptionEl.value,
+      date: showDate(),
+    };
+    notes.push(newNote);
+
+    setDataInLocalStorage(notes);
+    generateNotes(notes);
+    closeModal();
+
+    clearInputs();
+  }
 });
 function clearInputs() {
   inputEl.value = "";
@@ -56,7 +64,7 @@ function generateNotes(notes) {
           <div class="settings">
             <i class="uil uil-ellipsis-h" onclick="showSetting(this)"></i>
             <ul class="menu">
-              <li>
+              <li onclick="editNote(${i} ,'${note.tite}','${note.description}')">
                 <i class="uil uil-pen"></i>Edit
               </li>
               <li onclick="deleteNote(${i})">
@@ -85,6 +93,27 @@ function deleteNote(noteIndex) {
 
     generateNotes(newNotes);
   }
+}
+
+function editNote(index, noteTitle, noteDesc) {
+  isUpdate = true;
+
+  showModal(noteTitle, noteDesc);
+  updateId = index;
+}
+function showModal(noteTitle, noteDesc) {
+  if (isUpdate) {
+    titleEl.innerHTML = "Update your note";
+    btnElm.innerHTML = "Update the Note";
+
+    inputEl.value = noteTitle;
+    descriptionEl.value = noteDesc;
+  } else {
+    titleEl.innerHTML = "Add a note";
+    btnElm.innerHTML = "Add the Note";
+  }
+  inputEl.focus();
+  popUpEl.classList.add("show");
 }
 
 closeEl.addEventListener("click", closeModal);
