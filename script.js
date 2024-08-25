@@ -80,6 +80,12 @@ function generateNotes(notes) {
 
 function showSetting(el) {
   el.parentElement.classList.add("show");
+
+  document.addEventListener("click", (e) => {
+    if (e.target.tagName !== "I" || e.target != el) {
+      el.parentElement.classList.remove("show");
+    }
+  });
 }
 
 function deleteNote(noteIndex) {
