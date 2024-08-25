@@ -11,9 +11,17 @@ const descriptionEl = $.querySelector("textarea");
 const btnElm = $.querySelector("button");
 
 let notes = [];
-
+function generateNotes(notes) {}
 function getLocalStorageData() {
   let LocalStorageData = localStorage.getItem("notes");
-  console.log(LocalStorageData);
+  if (LocalStorageData) {
+    notes = JSON.parse(LocalStorageData);
+  } else {
+    notes = [];
+  }
+  return notes;
 }
-getLocalStorageData();
+window.addEventListener("load", () => {
+  let notes = getLocalStorageData();
+  generateNotes(notes);
+});
