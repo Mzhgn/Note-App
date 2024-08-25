@@ -1,6 +1,3 @@
-// const months = ["January", "February", "March", "April", "May", "June", "July",
-//     "August", "September", "October", "November", "December"];
-
 const $ = document;
 const wrapperEl = $.querySelector(".wrapper");
 const popUpEl = $.querySelector(".popup-box");
@@ -30,7 +27,7 @@ btnElm.addEventListener("click", () => {
   let newNote = {
     tite: inputEl.value,
     description: descriptionEl.value,
-    date: "August 25",
+    date: showDate(),
   };
   notes.push(newNote);
 
@@ -100,6 +97,42 @@ function getLocalStorageData() {
 
 function setDataInLocalStorage(notes) {
   localStorage.setItem("notes", JSON.stringify(notes));
+}
+
+function showDate() {
+  const months = [
+    "January",
+    "February",
+    "March",
+    "April",
+    "May",
+    "June",
+    "July",
+    "August",
+    "September",
+    "October",
+    "November",
+    "December",
+  ];
+  const days = [
+    "Sunday",
+    "Monday",
+    "Tuesday",
+    "Wednesday",
+    "Thursday",
+    "Friday",
+    "Saturday",
+  ];
+  let now = new Date();
+
+  let day = days[now.getDay()];
+  let month = months[now.getMonth()];
+  let year = now.getFullYear();
+  let date = now.getDate();
+
+  let dateInfo = ` ${month} ${date} ${year}(${day} )`;
+
+  return dateInfo;
 }
 
 window.addEventListener("load", () => {
