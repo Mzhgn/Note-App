@@ -36,9 +36,18 @@ btnElm.addEventListener("click", () => {
 
   setDataInLocalStorage(notes);
   generateNotes(notes);
-});
+  closeModal();
 
+  clearInputs();
+});
+function clearInputs() {
+  inputEl.value = "";
+  descriptionEl.value = "";
+}
 function generateNotes(notes) {
+  $.querySelectorAll(".note").forEach((note) => {
+    note.remove();
+  });
   notes.forEach((note) => {
     let notesLi = `<li class="note">
         <div class="details">
@@ -48,7 +57,7 @@ function generateNotes(notes) {
         <div class="bottom-content">
           <span>${note.date}</span>
           <div class="settings">
-            <i class="uil uil-ellipsis-h"></i>
+            <i class="uil uil-ellipsis-h" onclick="showSetting(this)"></i>
             <ul class="menu">
               <li>
                 <i class="uil uil-pen"></i>Edit
@@ -63,6 +72,22 @@ function generateNotes(notes) {
     wrapperEl.insertAdjacentHTML("beforeend", notesLi);
   });
 }
+
+function showSetting(el) {
+  el.parentElement.classList.add("show");
+}
+
+closeEl.addEventListener("click", closeModal);
+
+function closeModal() {
+  popUpEl.classList.remove("show");
+}
+window.addEventListener("keyup", (e) => {
+  if (e.key === "Escape") {
+    closeModal();
+  }
+});
+
 function getLocalStorageData() {
   let LocalStorageData = localStorage.getItem("notes");
   if (LocalStorageData) {
