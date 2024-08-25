@@ -45,7 +45,7 @@ function generateNotes(notes) {
   $.querySelectorAll(".note").forEach((note) => {
     note.remove();
   });
-  notes.forEach((note) => {
+  notes.forEach((note, i) => {
     let notesLi = `<li class="note">
         <div class="details">
           <p>${note.tite}</p>
@@ -59,8 +59,8 @@ function generateNotes(notes) {
               <li>
                 <i class="uil uil-pen"></i>Edit
               </li>
-              <li>
-                <i class="uil uil-trash"></i>Delete
+              <li onclick="deleteNote(${i})">
+                <i class="uil uil-trash" ></i>Delete
               </li>
             </ul>
           </div>
@@ -72,6 +72,19 @@ function generateNotes(notes) {
 
 function showSetting(el) {
   el.parentElement.classList.add("show");
+}
+
+function deleteNote(noteIndex) {
+  let checkIfDeleted = confirm("Are you sure to delete the note?");
+
+  if (checkIfDeleted) {
+    let newNotes = getLocalStorageData();
+    newNotes.splice(noteIndex, 1);
+
+    setDataInLocalStorage(newNotes);
+
+    generateNotes(newNotes);
+  }
 }
 
 closeEl.addEventListener("click", closeModal);
