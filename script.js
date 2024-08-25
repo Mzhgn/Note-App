@@ -2,6 +2,7 @@
 //     "August", "September", "October", "November", "December"];
 
 const $ = document;
+const wrapperEl = $.querySelector(".wrapper");
 const popUpEl = $.querySelector(".popup-box");
 const addBox = $.querySelector(".add-box");
 const titleEl = $.querySelector("header p");
@@ -26,10 +27,42 @@ addBox.addEventListener("click", () => {
 });
 
 btnElm.addEventListener("click", () => {
-  console.log("add note");
+  let newNote = {
+    tite: inputEl.value,
+    description: descriptionEl.value,
+    date: "August 25",
+  };
+  notes.push(newNote);
+
+  setDataInLocalStorage(notes);
+  generateNotes(notes);
 });
 
-function generateNotes(notes) {}
+function generateNotes(notes) {
+  notes.forEach((note) => {
+    let notesLi = `<li class="note">
+        <div class="details">
+          <p>${note.tite}</p>
+          <span>${note.description}</span>
+        </div>
+        <div class="bottom-content">
+          <span>${note.date}</span>
+          <div class="settings">
+            <i class="uil uil-ellipsis-h"></i>
+            <ul class="menu">
+              <li>
+                <i class="uil uil-pen"></i>Edit
+              </li>
+              <li>
+                <i class="uil uil-trash"></i>Delete
+              </li>
+            </ul>
+          </div>
+        </div>
+      </li>`;
+    wrapperEl.insertAdjacentHTML("beforeend", notesLi);
+  });
+}
 function getLocalStorageData() {
   let LocalStorageData = localStorage.getItem("notes");
   if (LocalStorageData) {
@@ -39,6 +72,11 @@ function getLocalStorageData() {
   }
   return notes;
 }
+
+function setDataInLocalStorage(notes) {
+  localStorage.setItem("notes", JSON.stringify(notes));
+}
+
 window.addEventListener("load", () => {
   let notes = getLocalStorageData();
   generateNotes(notes);
